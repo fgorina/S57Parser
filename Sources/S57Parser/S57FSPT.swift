@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct S57FSPT : Identifiable {
-    var name : [Byte]
-    var orientation : S57Orientation
-    var usageIndicator : S57Usage
-    var maskingIndicator : S57MaskingIndicator
+public struct S57FSPT : Identifiable {
+    public var name : [Byte]
+    public var orientation : S57Orientation
+    public var usageIndicator : S57Usage
+    public var maskingIndicator : S57MaskingIndicator
     
-    var vector: S57Vector?
+    public var vector: S57Vector?
     
-    var id : UInt64 {
+    public var id : UInt64 {
         
         var buf = name
         buf.append(contentsOf: [0, 0, 0])

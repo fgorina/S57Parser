@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct ExpectedInputCatalog {
+public struct ExpectedInputCatalog {
     
-    struct AttributeInput {
+    public struct AttributeInput {
         var attribute : UInt16
         var value : UInt16
         var meaning : String

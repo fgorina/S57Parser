@@ -10,15 +10,15 @@ import Foundation
 //MARK: - Intermediate Structures
 
 @dynamicMemberLookup
-struct Values : Identifiable{
-    var id : UUID = UUID()
+public struct Values : Identifiable{
+    public var id : UUID = UUID()
     
-    var properties : [String : Any]
+    public var properties : [String : Any]
     subscript(dynamicMember member: String) -> Any?{
         return properties[member]
     }
     
-    var description : String {
+    public var description : String {
         
         properties.map { (key: String, value: Any) in
             "\(key) : \(value)"
@@ -28,12 +28,12 @@ struct Values : Identifiable{
 }
 
 @dynamicMemberLookup
-struct DataItemField : Identifiable {
+public struct DataItemField : Identifiable {
     
-    var id : String {"\(tag)\(name)"}
-    var tag : String
-    var name : String
-    var properties : [Values] = []      // En cas de No repeatSubfields aleshores te un sols element
+    public  var id : String {"\(tag)\(name)"}
+    public var tag : String
+    public var name : String
+    public var properties : [Values] = []      // En cas de No repeatSubfields aleshores te un sols element
     subscript(dynamicMember member: String) -> Any?{
         if properties.count == 1{
             return properties[0].properties[member]
@@ -52,8 +52,8 @@ struct DataItemField : Identifiable {
 
 }
 
-struct RecordId : Equatable, Comparable{
-    static func < (lhs: RecordId, rhs: RecordId) -> Bool {
+public struct RecordId : Equatable, Comparable{
+    public static func < (lhs: RecordId, rhs: RecordId) -> Bool {
         if lhs.rcnm != rhs.rcnm{
             return lhs.rcnm < rhs.rcnm
         }else{
@@ -61,8 +61,8 @@ struct RecordId : Equatable, Comparable{
         }
     }
     
-    var rcnm : UInt8
-    var rcid : UInt32
+    public var rcnm : UInt8
+    public var rcid : UInt32
     
     static let rcnmConversion : [String : UInt8] =
     [
@@ -103,21 +103,21 @@ struct RecordId : Equatable, Comparable{
 }
 
 @dynamicMemberLookup
-struct DataItem : Identifiable{
+public struct DataItem : Identifiable{
     
-    var recordId : Int = 0
-    var isLeader : Bool = false
-    var fields : [String : DataItemField] = [:]
-    var id : Int {recordId}
-    var keyField : String = "0001"
+    public var recordId : Int = 0
+    public var isLeader : Bool = false
+    public var fields : [String : DataItemField] = [:]
+    public var id : Int {recordId}
+    public var keyField : String = "0001"
     
-    var uniqueId : RecordId
+    public var uniqueId : RecordId
 
     subscript(dynamicMember member: String) -> DataItemField?{
         return fields[member]
     }
 
-    var name : UInt64{
+    public var name : UInt64{
         
         let rcnm = fields[keyField]!.RCNM as! UInt8
         let rcid = fields[keyField]!.RCID as! UInt32
@@ -132,7 +132,7 @@ struct DataItem : Identifiable{
     
     
     //var names : String {fields.lazy.map{$0.0}.joined(separator: ",")}
-    var names : String { "\(keyField) : \(uniqueId)" }
+    public var names : String { "\(keyField) : \(uniqueId)" }
     init(_ record : S57Parser.DataRecord){
         isLeader = record.header.leaderIdentifier == "L"
         let srecordId = (record.fields.first(where: { field in

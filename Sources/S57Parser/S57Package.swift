@@ -8,16 +8,16 @@
 import Foundation
 
 
-class S57Package {
+public class S57Package {
     
-    var url : URL       // URL of the folder containint the package
+    public var url : URL       // URL of the folder containint the package
     
-    var catalog : [S57CatalogItem] = []
-    var currentItem : S57CatalogItem?
-    var currentFeatures : [UInt64 : S57Feature] = [:]
-    var currentFeatureClasses :  [(UInt16, String)] = []
+    public var catalog : [S57CatalogItem] = []
+    public var currentItem : S57CatalogItem?
+    public var currentFeatures : [UInt64 : S57Feature] = [:]
+    public var currentFeatureClasses :  [(UInt16, String)] = []
     
-    init(url : URL) throws{
+    public init(url : URL) throws{
         
         self.url = url
         let catalogURL = url.appendingPathComponent("CATALOG.031")
@@ -27,7 +27,7 @@ class S57Package {
         
     }
     
-    func select(item : S57CatalogItem) throws {
+    public func select(item : S57CatalogItem) throws {
         self.currentItem = item
         let url = url.appendingPathComponent(item.file)
         var parsedData = S57Parser(url: url)

@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum S57Relationship : UInt8 {
+public enum S57Relationship : UInt8 {
     case master = 1
     case slave = 2
     case peer = 3
     case null = 255
     
-    var description : String {
+    public var description : String {
         switch self {
         case .master :
             return "Master"
@@ -34,12 +34,12 @@ enum S57Relationship : UInt8 {
 }
 
 
-struct S57FFPT : Identifiable{
-    var longName : [UInt8]
-    var relationshipIndicator : S57Relationship
-    var comment : String
+public struct S57FFPT : Identifiable{
+    public var longName : [UInt8]
+    public var relationshipIndicator : S57Relationship
+    public var comment : String
     
-    var id : UInt64 {
+    public var id : UInt64 {
         return UInt64(littleEndianBytes: longName)
     }
     

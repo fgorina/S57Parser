@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-enum S57GeometricPrimitive : UInt8 {
+public enum S57GeometricPrimitive : UInt8 {
     case point = 1
     case line = 2
     case area = 3
@@ -29,33 +29,33 @@ enum S57GeometricPrimitive : UInt8 {
     }
 }
 
-struct S57Feature : Identifiable {
+public struct S57Feature : Identifiable {
     
     // FRID
-    var rcnm : UInt8
-    var rcid : UInt32
-    var prim : S57GeometricPrimitive
-    var grup : UInt8
-    var objl : UInt16
-    var decodedObjl : String?
-    var ruin : UInt8
-    var rver : UInt16
+    public var rcnm : UInt8
+    public var rcid : UInt32
+    public var prim : S57GeometricPrimitive
+    public var grup : UInt8
+    public var objl : UInt16
+    public var decodedObjl : String?
+    public var ruin : UInt8
+    public var rver : UInt16
 
     // Foid
     
-    var agen : UInt16
-    var fidn : UInt32
-    var fids : UInt16
+    public var agen : UInt16
+    public var fidn : UInt32
+    public var fids : UInt16
     
-    var attributes : [UInt16 : S57Attribute] = [:]
-    var nationalAttributes : [UInt16 : S57Attribute] = [:]
+    public var attributes : [UInt16 : S57Attribute] = [:]
+    public var nationalAttributes : [UInt16 : S57Attribute] = [:]
     
     // FFPT - >Feature Record to Feature Object pointer
 
-    var ffpt : [S57FFPT] = []
-    var fspt : [S57FSPT] = []
+    public var ffpt : [S57FFPT] = []
+    public var fspt : [S57FSPT] = []
     
-    var lnam : [Byte] {
+    public var lnam : [Byte] {
         var bytes : [UInt8] = []
         
         bytes.append(contentsOf: agen.toBytes)
@@ -65,9 +65,9 @@ struct S57Feature : Identifiable {
         return bytes
     }
     
-    var id : UInt64 { UInt64(littleEndianBytes: lnam) }
+    public  var id : UInt64 { UInt64(littleEndianBytes: lnam) }
     
-    var name : [Byte] {
+    public var name : [Byte] {
         var bytes : [UInt8] = []
         
         bytes.append(rcnm)
@@ -76,7 +76,7 @@ struct S57Feature : Identifiable {
         return  bytes
     }
     
-    var coordinates : [S57Coordinate]  {
+    public var coordinates : [S57Coordinate]  {
         var out : [S57Coordinate] = []
         
         for pt in fspt {

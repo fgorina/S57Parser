@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SomeErrors : Error {
+public enum SomeErrors : Error {
     case encodingError
     case stringToIntConversionError
     case notEnoughBytes

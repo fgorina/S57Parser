@@ -2,8 +2,12 @@
 
 A parser for ENC S57 files and directories
 
-Follows IHO S-57 specifications.
+Follows IHO S-57 specifications:
 
+    https://iho.int/uploads/user/pubs/standards/s-57/31Main.pdf
+    https://iho.int/uploads/user/pubs/standards/s-57/31ApAch1.pdf
+    https://iho.int/uploads/user/pubs/standards/s-57/31ApAch2.pdf
+    
 Has 3 levels :
     - Parser may return a Feature list with all references resolved with Swift Data Types.
         It is easier to use

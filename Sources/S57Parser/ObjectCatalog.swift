@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct ObjectCatalog{
+public struct ObjectCatalog{
     
-    struct ObjectDescription {
+    public struct ObjectDescription {
         
         var code : UInt16
         var objectClass : String

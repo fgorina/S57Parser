@@ -13,7 +13,7 @@ let eor : Byte = 0x1e
 
 //MARK: - S57 Parser
 
-struct S57Parser{
+public struct S57Parser{
     
     enum S57Errors : Error {
         

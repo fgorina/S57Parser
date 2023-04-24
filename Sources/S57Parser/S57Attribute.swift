@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct S57Attribute : Identifiable {
+public struct S57Attribute : Identifiable {
     
-    var attribute : UInt16
-    var decodedAttribute : String?
+    public var attribute : UInt16
+    public var decodedAttribute : String?
     
-    var value : String
-    var decodedValue : String?
+    public var value : String
+    public var decodedValue : String?
     
-    var id : UInt16 { attribute}
+    public var id : UInt16 { attribute}
     
     init(attribute : UInt16, value : String, attributeCatalog : AttributeCatalog?, expectedInputCatalog : ExpectedInputCatalog?){
         

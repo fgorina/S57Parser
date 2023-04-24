@@ -10,35 +10,35 @@
 import Foundation
 import MapKit
 
-struct S57Coordinate : Identifiable {
-    var longitude : Double
-    var latitude : Double
-    var depth : Double?
+public struct S57Coordinate : Identifiable {
+    public var longitude : Double
+    public var latitude : Double
+    public var depth : Double?
     
-    var id : Double {
+    public var id : Double {
         latitude * 1000.0 + longitude
     }
-    var coordinates : CLLocationCoordinate2D {
+    public var coordinates : CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
     
 }
 
-struct S57Vector {
+public struct S57Vector {
     
-    var rcnm : UInt8
-    var rcid : UInt32
-    var ruin : UInt8
-    var rver : UInt16
+    public var rcnm : UInt8
+    public var rcid : UInt32
+    public var ruin : UInt8
+    public var rver : UInt16
     
-    var sounding : Bool    = false  // If true coordinates.ve3d has a value, if not i is nil
-    var coordinates : [S57Coordinate] = []
+    public var sounding : Bool    = false  // If true coordinates.ve3d has a value, if not i is nil
+    public var coordinates : [S57Coordinate] = []
     
-    var attributes : [UInt16 : S57Attribute] = [:]
+    public var attributes : [UInt16 : S57Attribute] = [:]
     
-    var recordPointers : [S57VRPT] = []
+    public var recordPointers : [S57VRPT] = []
         
-    var name : [Byte] {
+    public var name : [Byte] {
         var bytes : [UInt8] = []
         
         bytes.append(rcnm)
@@ -48,13 +48,13 @@ struct S57Vector {
         
         return  bytes
     }
-    var id : UInt64 {
+    public var id : UInt64 {
      
         return UInt64(littleEndianBytes: name)
     }
 
     
-    var rcnmDescription : String {
+    public var rcnmDescription : String {
         switch rcnm {
         case 110 :
             return "Isolated Node"
@@ -74,7 +74,7 @@ struct S57Vector {
         }
     }
     
-    var expandedCoordinates : [S57Coordinate]{
+    public var expandedCoordinates : [S57Coordinate]{
         var out : [S57Coordinate] = []
          
         // If Isolated no

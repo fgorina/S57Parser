@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct S57CatalogItem{
+public struct S57CatalogItem{
     
     enum Implementation : String {
         case asc = "ASC"
