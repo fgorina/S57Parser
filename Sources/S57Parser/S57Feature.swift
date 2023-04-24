@@ -14,7 +14,7 @@ public enum S57GeometricPrimitive : UInt8 {
     case area = 3
     case null = 255
     
-    var description : String {
+    public var description : String {
         switch self {
         case .point:
             return "Point"
