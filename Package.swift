@@ -20,9 +20,20 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "S57Parser",
-            dependencies: []),
+            dependencies: [],
+            resources: [
+                .copy("Resources/s57agencies.csv"),
+                .copy("Resources/s57attributes.csv"),
+                .copy("Resources/s57expectedinput.csv"),
+                .copy("Resources/s57objectclasses.csv")]
+        ),
         .testTarget(
             name: "S57ParserTests",
-            dependencies: ["S57Parser"]),
+            dependencies: ["S57Parser"],
+            resources: [
+                .copy("CATALOG.031"),
+                .copy("ES539411.002")
+                ]
+        ),
     ]
 )
