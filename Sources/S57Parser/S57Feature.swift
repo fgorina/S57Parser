@@ -115,10 +115,15 @@ public struct S57Feature : Identifiable {
             print("Not Found")
         }
 
-        let foid = item.FOID!
-        agen = try foid.AGEN as? UInt16 ?! SomeErrors.encodingError
-        fidn = try foid.FIDN as? UInt32 ?! SomeErrors.encodingError
-        fids = try foid.FIDS as? UInt16 ?! SomeErrors.encodingError
+        if let foid = item.FOID{
+            agen = try foid.AGEN as? UInt16 ?! SomeErrors.encodingError
+            fidn = try foid.FIDN as? UInt32 ?! SomeErrors.encodingError
+            fids = try foid.FIDS as? UInt16 ?! SomeErrors.encodingError
+        }else {
+            agen = 0
+            fidn = 0
+            fids = 0
+        }
 
         if  let attributes = item.ATTF?.properties {
             for someAttr in attributes {
