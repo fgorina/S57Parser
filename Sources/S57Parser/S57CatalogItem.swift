@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 public struct S57CatalogItem : Identifiable{
     
@@ -25,6 +26,26 @@ public struct S57CatalogItem : Identifiable{
     public var elon : Double?
     public var crc : String
     public var comment : String
+    
+    public var region : MKCoordinateRegion? {
+        if let nlat = nlat, let slat = slat, let wlon = wlon, let elon = elon {
+            let span = MKCoordinateSpan(latitudeDelta: nlat - slat, longitudeDelta: elon - wlon)
+            let center = CLLocationCoordinate2D(latitude: (nlat + slat) / 2.0, longitude: (elon + wlon) / 2.0)
+            
+            return MKCoordinateRegion(center: center, span: span)
+        }else{
+            return nil
+        }
+    }
+    
+    public var descCoordinates : String {
+        
+        if let region = region {
+            return "\(region.center.latitude) \(region.center.longitude) Size \(region.span.latitudeDelta)  \(region.span.longitudeDelta)"
+        }else{
+            return ""
+        }
+    }
     
     init(_ item : DataItem) throws{
         do{
