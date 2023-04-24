@@ -22,9 +22,6 @@ public struct ObjectCatalog{
 
         init(row : [String]) throws{
             
-            if row[0] == "401" {
-                print("401")
-            }
             code = try UInt16(row[0]) ?! SomeErrors.encodingError
             objectClass = row[1]
             acronym = row[2]

@@ -41,7 +41,7 @@ public struct S57CatalogItem : Identifiable{
     public var descCoordinates : String {
         
         if let region = region {
-            return "\(region.center.latitude) \(region.center.longitude) Size \(region.span.latitudeDelta)  \(region.span.longitudeDelta)"
+            return "\(region.center.formatted()) Size \(region.span.latitudeDelta.formatted(decimals: 2))  \(region.span.longitudeDelta.formatted(decimals: 2))"
         }else{
             return ""
         }
