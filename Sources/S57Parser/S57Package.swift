@@ -31,8 +31,14 @@ public class S57Package {
         self.currentItem = item
         
         // Split file into items
+        var separator = "/"
+        if item.file.contains("/"){
+            separator = "/"
+        }else if item.file.contains("\\"){
+            separator = "\\"
+        }
         
-        let components = item.file.components(separatedBy: "/")
+        let components = item.file.components(separatedBy: separator)
         var url = url
         for component in components{
             url = url.appendingPathComponent(component)
