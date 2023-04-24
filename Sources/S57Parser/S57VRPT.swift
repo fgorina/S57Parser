@@ -54,7 +54,7 @@ public struct S57VRPT : Identifiable{
     public var topologyIndicator : S57TopologyIndicator
     public var maskingIndicator : S57MaskingIndicator
     
-    var vector : S57Vector?
+    public var vector : S57Vector?
     
     
     public var id : UInt64 {
