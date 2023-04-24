@@ -7,24 +7,24 @@
 
 import Foundation
 
-public struct S57CatalogItem{
+public struct S57CatalogItem : Identifiable{
     
-    enum Implementation : String {
+    public enum Implementation : String {
         case asc = "ASC"
         case bin = "BIN"
         case txt = "TXT"
     }
-    var id : UInt
-    var file : String
-    var longFile : String
-    var volume : String
-    var implementation : Implementation
-    var slat : Double?
-    var nlat : Double?
-    var wlon : Double?
-    var elon : Double?
-    var crc : String
-    var comment : String
+    public var id : UInt
+    public var file : String
+    public var longFile : String
+    public var volume : String
+    public var implementation : Implementation
+    public var slat : Double?
+    public var nlat : Double?
+    public var wlon : Double?
+    public var elon : Double?
+    public var crc : String
+    public var comment : String
     
     init(_ item : DataItem) throws{
         do{
