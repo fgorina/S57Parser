@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct AttributeCatalog{
+public struct AttributeCatalog{
     
-    struct AttributeDescription {
+    public struct AttributeDescription {
         
-        var code : UInt16
-        var attribute : String
-        var acronym : String
-        var attributeType : String
-        var classType : String
+        public var code : UInt16
+        public var attribute : String
+        public var acronym : String
+        public var attributeType : String
+        public var classType : String
 
         init(row : [String]) throws{
             code = try UInt16(row[0]) ?! SomeErrors.encodingError
@@ -44,11 +44,11 @@ struct AttributeCatalog{
         self.init(rows : csv.rows)
     }
     
-    func attributeForCode(_ i : UInt16) -> AttributeDescription?{
+    public func attributeForCode(_ i : UInt16) -> AttributeDescription?{
         return attributes[i]
     }
     
-    func attributeForAcronym(_ acr : String)  -> AttributeDescription?{
+    public func attributeForAcronym(_ acr : String)  -> AttributeDescription?{
         return attributes.first { (key: UInt16, value: AttributeDescription) in
             value.acronym == acr
         }?.value

@@ -15,7 +15,7 @@ let eor : Byte = 0x1e
 
 public struct S57Parser{
     
-    enum S57Errors : Error {
+    public enum S57Errors : Error {
         
         case DataStructureCodeInvalid
         case DataTypeCodeInvalid
@@ -27,7 +27,7 @@ public struct S57Parser{
     
     
     
-    enum FieldTypes {
+    public enum FieldTypes {
         case UInt8
         case UInt16
         case UInt32
@@ -38,20 +38,20 @@ public struct S57Parser{
         case Array
     }
     
-    enum DataStructureCode : String {
+    public enum DataStructureCode : String {
         case noStructure = "0"
         case linearStructure = "1"
         case multiDimensionalStructure = "2"
     }
     
-    enum DataTypeCode : String {
+    public enum DataTypeCode : String {
         case string = "0"
         case integer = "1"
         case binary = "5"
         case mixed = "6"
     }
     
-    struct FieldControl {
+    public struct FieldControl {
         var parent : String
         var child : String
         
@@ -60,12 +60,12 @@ public struct S57Parser{
         }
     }
     
-    struct DirEntry {
-        var tag : String
-        var length : Int
-        var position : Int
+    public struct DirEntry {
+        public var tag : String
+        public var length : Int
+        public var position : Int
         
-        var description : String {
+        public var description : String {
             
             "Dir Entry Tag : \(tag) Length: \(length) Position : \(position)"
         }
@@ -79,31 +79,31 @@ public struct S57Parser{
         }
     }
     
-    struct SubFieldType {
-        var kind : FieldTypes
-        var size : Int
-        var tag : String
+    public struct SubFieldType {
+        public var kind : FieldTypes
+        public var size : Int
+        public var tag : String
         
-        var description : String {
+        public var description : String {
             "Tag: \(tag) Type : \(kind) Size: \(size)"
         }
     }
     
-    struct FieldType {
-        var tag : String
-        var length : Int
-        var position : Int
-        var dataStructure : DataStructureCode
-        var dataType : DataTypeCode
-        var auxiliaryControls : String
-        var printableFt : String
-        var printableUt : String
-        var escapeSeq : String
-        var name : String
-        var arrayDescriptor : String
-        var formatControls : String = ""
-        var repeatSubfields : Bool = false
-        var subfields : [SubFieldType] = []
+    public  struct FieldType {
+        public var tag : String
+        public var length : Int
+        public var position : Int
+        public var dataStructure : DataStructureCode
+        public var dataType : DataTypeCode
+        public var auxiliaryControls : String
+        public var printableFt : String
+        public var printableUt : String
+        public var escapeSeq : String
+        public var name : String
+        public var arrayDescriptor : String
+        public var formatControls : String = ""
+        public var repeatSubfields : Bool = false
+        public var subfields : [SubFieldType] = []
         
         init?(tag: String, length : Int, position : Int , bytes : [Byte]) throws{
             
@@ -306,12 +306,12 @@ public struct S57Parser{
         }
     }
     
-    struct Field {
-        var tag : String
-        var length : Int
-        var position : Int
-        var fieldType : FieldType
-        var subfields : [Any] = []
+    public struct Field {
+        public var tag : String
+        public var length : Int
+        public var position : Int
+        public var fieldType : FieldType
+        public var subfields : [Any] = []
         
         init(tag: String, length: Int, position: Int, fieldType: FieldType, stream: BufferedInputStream, encoding: String.Encoding) throws{
             self.tag = tag
@@ -338,21 +338,21 @@ public struct S57Parser{
         }
     }
     
-    struct Header {
-        var recordLength : Int
-        var interchangeLevel : String
-        var leaderIdentifier : String
-        var inLineCodeExtensionIndicator : String
-        var versionNumber : String
-        var applicationIndicator: String
-        var fieldControlLength : String
-        var baseAddressOfFieldArea : Int
-        var extendedCharacterIndicator : String
-        var sizeOfFieldLength : Int
-        var sizeOfFieldPosition : Int
-        var reserved : String
-        var sizeOfFieldTag : Int
-        var entries : [DirEntry] = []
+    public struct Header {
+        public var recordLength : Int
+        public var interchangeLevel : String
+        public var leaderIdentifier : String
+        public var inLineCodeExtensionIndicator : String
+        public var versionNumber : String
+        public var applicationIndicator: String
+        public var fieldControlLength : String
+        public var baseAddressOfFieldArea : Int
+        public var extendedCharacterIndicator : String
+        public var sizeOfFieldLength : Int
+        public var sizeOfFieldPosition : Int
+        public var reserved : String
+        public var sizeOfFieldTag : Int
+        public var entries : [DirEntry] = []
         
         
         
@@ -398,7 +398,7 @@ public struct S57Parser{
         }
         
         
-        var description : String {
+        public var description : String {
             var output = (
             """
 Header :
@@ -431,10 +431,10 @@ Header :
         
     }
     
-    class LeadRecord {
-        var header : Header
-        var fieldTypes : [String : FieldType] = [:]
-        var fieldControlField : [FieldControl] = []
+    public class LeadRecord {
+        public var header : Header
+        public var fieldTypes : [String : FieldType] = [:]
+        public var fieldControlField : [FieldControl] = []
         var baseAddressOfData : Int {
             header.baseAddressOfFieldArea + header.entries.reduce(0, { acum, dirEntry in
                 acum + dirEntry.length
@@ -481,12 +481,12 @@ Header :
         
     }
     
-    struct DataRecord {
-        var header : Header
-        var lead: LeadRecord
-        var fields : [Field] = []
+    public struct DataRecord {
+        public var header : Header
+        public var lead: LeadRecord
+        public var fields : [Field] = []
         
-        var length : Int {
+        public var length : Int {
             header.baseAddressOfFieldArea + fields.reduce(0, { acum, field in
                 acum + field.length
             })
@@ -560,29 +560,29 @@ Header :
         }
     }
     
-    var url : URL?
+    public var url : URL?
     var stream : BufferedInputStream?
     
-    var leadRecord : LeadRecord?
-    var dataRecords : [DataRecord] = []
-    var items : [DataItem] = []
+    public var leadRecord : LeadRecord?
+    public var dataRecords : [DataRecord] = []
+    public var items : [DataItem] = []
 
-    var parameters : DataItemField?
-    var structure : DataItemField?
+    public var parameters : DataItemField?
+    public var structure : DataItemField?
     
-    var catalog : [S57CatalogItem] = []
+    public var catalog : [S57CatalogItem] = []
     
-    var objectClasses : ObjectCatalog?
-    var attributeCatalog : AttributeCatalog?
-    var expectedInputCatalog : ExpectedInputCatalog?
+    public var objectClasses : ObjectCatalog?
+    public var attributeCatalog : AttributeCatalog?
+    public var expectedInputCatalog : ExpectedInputCatalog?
 
-    var vectors : [UInt64 : S57Vector] = [:]
-    var features : [UInt64 : S57Feature] = [:]
+    public var vectors : [UInt64 : S57Vector] = [:]
+    public var features : [UInt64 : S57Feature] = [:]
     
-    var coordinateFactor : Double = 1.0        // COMF
-    var soundingFactor : Double = 1.0       // SOMF
+    public var coordinateFactor : Double = 1.0        // COMF
+    public var soundingFactor : Double = 1.0       // SOMF
     
-    var featureClasses : [(UInt16, String)] = []
+    public var featureClasses : [(UInt16, String)] = []
     
     func vectorForVRPT(_ vrpt : S57VRPT) -> S57Vector?{
         return vectors[vrpt.id]
@@ -757,7 +757,7 @@ Header :
         
     }
     
-    mutating func parse() throws{
+    public mutating func parse() throws{
         if let objectClassesUrl = Bundle.module.url(forResource: "s57objectclasses", withExtension: "csv") {
             objectClasses = try? ObjectCatalog(url: objectClassesUrl)
         }
