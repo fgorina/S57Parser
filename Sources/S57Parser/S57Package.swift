@@ -29,7 +29,14 @@ public class S57Package {
     
     public func select(item : S57CatalogItem) throws {
         self.currentItem = item
-        let url = url.appendingPathComponent(item.file)
+        
+        // Split file into items
+        
+        let components = item.file.components(separatedBy: "/")
+        var url = url
+        for component in components{
+            url = url.appendingPathComponent(component)
+        }
         var parsedData = S57Parser(url: url)
         try parsedData.parse()
         currentFeatures = parsedData.features
