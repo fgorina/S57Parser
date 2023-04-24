@@ -18,7 +18,7 @@ public enum S57Usage : UInt8 {
     case exteriorTruncated = 3
     case null = 255
     
-    var description : String {
+    public var description : String {
         switch self {
         case .exterior:
             return "Exterior"
