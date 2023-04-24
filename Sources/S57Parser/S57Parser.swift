@@ -836,4 +836,12 @@ Header :
              print("Error : \(error)")
         }
     }
+    
+    public init(){
+        
+    }
+    
+    public init(url : URL){
+        self.url = url
+    }
 }
