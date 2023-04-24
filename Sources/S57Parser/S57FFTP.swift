@@ -43,7 +43,7 @@ public struct S57FFPT : Identifiable{
         return UInt64(littleEndianBytes: longName)
     }
     
-    var feature : S57Feature?
+    public var feature : S57Feature?
     
     init(longName : [UInt8], relationshipIndicator : S57Relationship, comment: String, feature : S57Feature?){
         self.longName = longName
