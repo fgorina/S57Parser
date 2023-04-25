@@ -13,6 +13,25 @@ public enum S57UpdateInstruction : UInt8 {
     case delete = 2
     case modify = 3
     case null = 255
+    
+    public var description : String {
+        
+        switch self {
+        case .insert:
+            return "insert"
+            
+        case .delete:
+            return "delete"
+            
+        case .modify:
+            return "update"
+            
+        case .null:
+            return "null"
+            
+        }
+    }
+    
 }
 
 public enum S57GeometricPrimitive : UInt8 {
