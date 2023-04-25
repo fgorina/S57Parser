@@ -8,6 +8,13 @@
 import Foundation
 import MapKit
 
+public enum S57UpdateInstruction : UInt8 {
+    case insert = 1
+    case delete = 2
+    case modify = 3
+    case null = 255
+}
+
 public enum S57GeometricPrimitive : UInt8 {
     case point = 1
     case line = 2
@@ -38,7 +45,7 @@ public struct S57Feature : Identifiable {
     public var grup : UInt8
     public var objl : UInt16
     public var decodedObjl : String?
-    public var ruin : UInt8
+    public var ruin : S57UpdateInstruction
     public var rver : UInt16
 
     // Foid
@@ -93,7 +100,8 @@ public struct S57Feature : Identifiable {
         let frid = item.FRID!
         rcnm = try frid.RCNM as? UInt8 ?! SomeErrors.encodingError
         rcid = try frid.RCID as? UInt32 ?! SomeErrors.encodingError
-        ruin = try frid.RUIN as? UInt8 ?! SomeErrors.encodingError
+        let vruin = try frid.RUIN as? UInt8 ?! SomeErrors.encodingError
+        ruin = S57UpdateInstruction(rawValue: vruin) ?? S57UpdateInstruction.null
         rver = try frid.RVER as? UInt16 ?! SomeErrors.encodingError
         objl = try frid.OBJL as? UInt16 ?! SomeErrors.encodingError
         let vprim = try frid.PRIM as? UInt8 ?! SomeErrors.encodingError

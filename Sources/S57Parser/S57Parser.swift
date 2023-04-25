@@ -24,9 +24,7 @@ public struct S57Parser{
         case UnableToCreateStream
         
     }
-    
-    
-    
+     
     public enum FieldTypes {
         case UInt8
         case UInt16

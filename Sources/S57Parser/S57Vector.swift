@@ -28,7 +28,7 @@ public struct S57Vector {
     
     public var rcnm : UInt8
     public var rcid : UInt32
-    public var ruin : UInt8
+    public var ruin : S57UpdateInstruction
     public var rver : UInt16
     
     public var sounding : Bool    = false  // If true coordinates.ve3d has a value, if not i is nil
@@ -102,7 +102,8 @@ public struct S57Vector {
         let vrid = item.VRID!
         rcnm = try vrid.RCNM as? UInt8 ?! SomeErrors.encodingError
         rcid = try vrid.RCID as? UInt32 ?! SomeErrors.encodingError
-        ruin = try vrid.RUIN as? UInt8 ?! SomeErrors.encodingError
+        let vruin = try vrid.RUIN as? UInt8 ?! SomeErrors.encodingError
+        ruin = S57UpdateInstruction(rawValue: vruin) ?? S57UpdateInstruction.null
         rver = try vrid.RVER as? UInt16 ?! SomeErrors.encodingError
         
         if let points = item.SG2D?.properties{
