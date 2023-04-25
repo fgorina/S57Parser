@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-extension CLLocationCoordinate2D {
+public extension CLLocationCoordinate2D {
     
     func formatted() -> String {
         let lS = latitude >= 0 ? "N" : "S"
@@ -16,4 +16,11 @@ extension CLLocationCoordinate2D {
         return "\(abs(latitude).asDDDmmm())\(lS)  \(abs(longitude).asDDDmmm())\(LS)"
     }
 
+}
+
+public extension MKCoordinateRegion {
+    
+    var description : String {
+        return "\(center.formatted()) Δl \(span.latitudeDelta.asDDDmmm()) Δl \(span.longitudeDelta.asDDDmmm()))"
+    }
 }
