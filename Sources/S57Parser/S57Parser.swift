@@ -846,13 +846,16 @@ Header :
         
         do {
             if let url = url {
+#if os(iOS)
                 if url.startAccessingSecurityScopedResource() {
-                    
                     stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
-                    
                     stream!.open()
-                    
+                    url.stopAccessingSecurityScopedResource()
                 }
+#else
+                stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
+                stream!.open()
+#endif
                 
                 defer {
                     stream!.close()
