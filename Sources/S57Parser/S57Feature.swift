@@ -24,7 +24,7 @@ public enum S57UpdateInstruction : UInt8 {
             return "delete"
             
         case .modify:
-            return "update"
+            return "modify"
             
         case .null:
             return "null"
@@ -114,6 +114,34 @@ public struct S57Feature : Identifiable {
         return out
     }
 
+    public var region : MKCoordinateRegion?
+    
+    func computeRegion() -> MKCoordinateRegion?{
+        
+        if coordinates.count == 0 {
+            return nil
+        } else if coordinates.count == 1 {
+            return  MKCoordinateRegion(center: coordinates[0].coordinates, latitudinalMeters: 0.0, longitudinalMeters: 0.0)
+        }else {
+            var minLat : Double = coordinates[0].latitude
+            var maxLat : Double = coordinates[0].latitude
+            var minLon : Double = coordinates[0].longitude
+            var maxLon : Double = coordinates[0].longitude
+            
+            for coordinate in coordinates {
+                minLat = min(minLat, coordinate.latitude)
+                minLon = min(minLon, coordinate.longitude)
+                maxLat = max(maxLat, coordinate.latitude)
+                maxLon = max(maxLon, coordinate.longitude)
+            }
+            
+            let center = CLLocationCoordinate2D(latitude: (minLat + maxLat)/2.0, longitude: (minLon + maxLon)/2.0)
+            let span = MKCoordinateSpan(latitudeDelta: maxLat - minLat, longitudeDelta: maxLon - minLon)
+            
+            return  MKCoordinateRegion(center: center, span: span)
+        }
+        
+    }
     init(_ item : DataItem, objectCatalog: ObjectCatalog?, attributeCatalog: AttributeCatalog?, expectedInputCatalog : ExpectedInputCatalog?)  throws {
         
         let frid = item.FRID!

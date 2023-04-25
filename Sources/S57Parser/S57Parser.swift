@@ -757,9 +757,12 @@ Header :
             f.ffpt = f.ffpt.map({ ffpt in
                 dereferenceFFPT(ffpt, inProcessVector: [f.id])
             })
-            
+
+            f.region = f.computeRegion()
             features[key] = f
         }
+        
+        
     }
     
     mutating func cleanFeatures() {
@@ -814,7 +817,7 @@ Header :
         dereferenceVectors()        // So we may send only a vector and don't need related ones
         dereferenceFeatures()// Difficult to see if we link
 
-    }
+     }
     mutating func cleanPointers(){
         cleanFeatures()
         cleanVectors()
