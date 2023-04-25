@@ -19,3 +19,5 @@ Has 3 levels :
         having to typecast values.
         
 
+
+Some ideas from https://github.com/tburke/iso8211.git

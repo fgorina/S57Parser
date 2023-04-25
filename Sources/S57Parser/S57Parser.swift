@@ -662,6 +662,15 @@ Header :
         }
     }
     
+    func cleanVPRT(_ vrpt : S57VRPT) -> S57VRPT{
+        if vrpt.vector == nil {
+            return  vrpt
+        }else{
+            return S57VRPT(name: vrpt.name, orientation: vrpt.orientation, usageIndicator: vrpt.usageIndicator,
+                           topologyIndicator: vrpt.topologyIndicator, maskingIndicator: vrpt.maskingIndicator, vector: nil)
+        }
+    }
+    
     func dereferenceFSPT(_ fspt  : S57FSPT, inProcessVector : [UInt64] = []) -> S57FSPT{
         
         if fspt.vector != nil {
@@ -684,6 +693,16 @@ Header :
         }
     }
 
+    func cleanFSPT(_ fspt  : S57FSPT) -> S57FSPT{
+        
+        if fspt.vector == nil {
+            return  fspt
+        }else{
+            return S57FSPT(name: fspt.name, orientation: fspt.orientation, usageIndicator: fspt.usageIndicator,
+                            maskingIndicator: fspt.maskingIndicator, vector: nil)
+        }
+    }
+    
     func dereferenceFFPT(_ ffpt  : S57FFPT, inProcessVector : [UInt64] = []) -> S57FFPT{
         
         if ffpt.feature != nil {
@@ -704,6 +723,14 @@ Header :
         }
     }
 
+    func cleanFFPT(_ ffpt  : S57FFPT) -> S57FFPT{
+        
+        if ffpt.feature == nil {
+            return  ffpt
+        }else{
+            return S57FFPT(longName: ffpt.longName, relationshipIndicator: ffpt.relationshipIndicator, comment: ffpt.comment, feature: nil)
+        }
+    }
     
 
     mutating func dereferenceVectors(){
@@ -736,8 +763,24 @@ Header :
             features[key] = f
         }
     }
+    
+    mutating func cleanFeatures() {
+        
+        for key in features.keys{
+            var f = features[key]!
+            
+             f.fspt = f.fspt.map({ fspt in
+                cleanFSPT(fspt)
+            })
+            f.ffpt = f.ffpt.map({ ffpt in
+                cleanFFPT(ffpt)
+            })
+            features[key] = f
+        }
 
-    mutating func buildFeaturetClasses() {
+    }
+
+    mutating func buildFeatureClasses() {
         featureClasses = []
         
         for f in features.values {
@@ -755,6 +798,28 @@ Header :
         }
         
         
+    }
+    
+    mutating func cleanVectors(){
+        // Clean Vectors
+        
+        for key in vectors.keys{
+            var v = vectors[key]!
+            v.recordPointers = v.recordPointers.map({ vrpt in
+                cleanVPRT(vrpt)
+            })
+            vectors[key] = v
+        }
+    }
+    
+    mutating func dereferencePointers(){
+        dereferenceVectors()        // So we may send only a vector and don't need related ones
+        dereferenceFeatures()// Difficult to see if we link
+
+    }
+    mutating func cleanPointers(){
+        cleanFeatures()
+        cleanVectors()
     }
     
     public mutating func parse() throws{
@@ -781,9 +846,13 @@ Header :
         
         do {
             if let url = url {
-                stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
-                
-                stream!.open()
+                if url.startAccessingSecurityScopedResource() {
+                    
+                    stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
+                    
+                    stream!.open()
+                    
+                }
                 
                 defer {
                     stream!.close()
@@ -825,9 +894,9 @@ Header :
                     // EOF.
                     
                 }
-                buildFeaturetClasses()
-                dereferenceVectors()        // So we may send only a vector and don't need related ones
-                dereferenceFeatures()// Difficult to see if we link
+                                
+                buildFeatureClasses()
+                dereferencePointers()// Difficult to see if we link
                 
                 print("Done")
                 // Only for catalog
