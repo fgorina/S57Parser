@@ -44,7 +44,7 @@ public class S57Package {
             url = url.appendingPathComponent(component)
         }
         var parsedData = S57Parser(url: url)
-        try parsedData.parse(false)
+        try parsedData.parse(false) // Just to not use a securityScopedURL
         currentFeatures = parsedData.features
         currentFeatureClasses = parsedData.featureClasses
     }
