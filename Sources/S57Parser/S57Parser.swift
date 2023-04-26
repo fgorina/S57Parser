@@ -823,7 +823,7 @@ Header :
         cleanVectors()
     }
     
-    public mutating func parse() throws{
+    public mutating func parse(_ security : Bool = true) throws{
         if let objectClassesUrl = Bundle.module.url(forResource: "s57objectclasses", withExtension: "csv") {
             objectClasses = try? ObjectCatalog(url: objectClassesUrl)
         }
@@ -848,11 +848,18 @@ Header :
         do {
             if let url = url {
 #if os(iOS)
-                if url.startAccessingSecurityScopedResource() {
-                    stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
-                    stream!.open()
-                    url.stopAccessingSecurityScopedResource()
-                }
+                if security{
+                    url.startAccessingSecurityScopedResource() {
+                        stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
+                        stream!.open()
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                    }else {
+                        stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
+                        stream!.open()
+
+                    }
+                    
 #else
                 stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
                 stream!.open()
