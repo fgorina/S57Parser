@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 
 public class S57Package {
@@ -16,6 +17,7 @@ public class S57Package {
     public var currentItem : S57CatalogItem?
     public var currentFeatures : [UInt64 : S57Feature] = [:]
     public var currentFeatureClasses :  [(UInt16, String)] = []
+    public var region : MKCoordinateRegion
     
     public init(url : URL) throws{
         
@@ -26,6 +28,21 @@ public class S57Package {
         catalog = parsedData.catalog.filter({ it in
             it.file.hasSuffix(".000")
         })
+        if catalog.isEmpty{
+            region = .world
+        }else {
+            let someRegion = catalog.first { item in
+                item.region != nil
+            }?.region! ?? MKCoordinateRegion.emptyRegion
+            
+            region = catalog.reduce(someRegion, { partialResult, item in
+                if let reg = item.region {
+                    return reg.union(partialResult)
+                }else{
+                    return partialResult
+                }
+            })
+        }
         
     }
     
