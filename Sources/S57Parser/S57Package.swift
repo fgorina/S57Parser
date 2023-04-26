@@ -23,7 +23,9 @@ public class S57Package {
         let catalogURL = url.appendingPathComponent("CATALOG.031")
         var parsedData = S57Parser(url: catalogURL)
         try parsedData.parse()
-        catalog = parsedData.catalog
+        catalog = parsedData.catalog.filter({ it in
+            it.file.hasSuffix(".000")
+        })
         
     }
     
