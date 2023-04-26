@@ -82,14 +82,22 @@ public struct S57Vector {
         if  recordPointers.count > 0 {
             // Lookup referenced vector
             let vrpt = recordPointers[0]
-            out.append(contentsOf: vrpt.vector?.expandedCoordinates ?? [])
+            if vrpt.orientation == .reverse{
+                out.append(contentsOf: (vrpt.vector?.expandedCoordinates ?? []).reversed())
+            }else{
+                out.append(contentsOf: vrpt.vector?.expandedCoordinates ?? [])
+            }
         }
         
         out.append(contentsOf: coordinates)
         
         if recordPointers.count > 1 {
             let vrpt = recordPointers[1]
-            out.append(contentsOf: vrpt.vector?.expandedCoordinates ?? [])
+            if vrpt.orientation == .reverse{
+                out.append(contentsOf: (vrpt.vector?.expandedCoordinates ?? []).reversed())
+            }else{
+                out.append(contentsOf: vrpt.vector?.expandedCoordinates ?? [])
+            }
         }
         
         return out

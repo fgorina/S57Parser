@@ -107,7 +107,11 @@ public struct S57Feature : Identifiable {
         
         for pt in fspt {
             if let vector = pt.vector{
-                out.append(contentsOf: vector.expandedCoordinates)
+                if pt.orientation == .reverse{
+                    out.append(contentsOf: vector.expandedCoordinates.reversed())
+                }else {
+                    out.append(contentsOf: vector.expandedCoordinates)
+                }
             }
         }
         
