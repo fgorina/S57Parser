@@ -849,7 +849,7 @@ Header :
             if let url = url {
 #if os(iOS)
                 if security{
-                    url.startAccessingSecurityScopedResource() {
+                    if url.startAccessingSecurityScopedResource() {
                         stream = try BufferedInputStream(url: url) ?! S57Errors.UnableToCreateStream
                         stream!.open()
                         url.stopAccessingSecurityScopedResource()
