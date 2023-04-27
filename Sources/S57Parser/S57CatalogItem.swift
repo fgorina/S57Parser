@@ -26,7 +26,7 @@ public struct S57CatalogItem : Identifiable, S57Displayable{
     public var elon : Double?
     public var crc : String
     public var comment : String
-    public var prim : S57GeometricPrimitive = .area
+    public var prim : S57GeometricPrimitive = .line
     
     public var coordinates : [S57Coordinate]  {
         
