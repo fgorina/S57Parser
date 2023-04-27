@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 
+@available(iOS 13.0, *)
 @available(macOS 10.15, *)
 public protocol S57Displayable : Identifiable {
     
