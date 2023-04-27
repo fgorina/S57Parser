@@ -55,7 +55,7 @@ public enum S57GeometricPrimitive : UInt8 {
     }
 }
 
-public struct S57Feature : Identifiable {
+public struct S57Feature : Identifiable, S57Displayable {    
     
     // FRID
     public var rcnm : UInt8

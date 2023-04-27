@@ -8,14 +8,14 @@
 import Foundation
 import MapKit
 
-public struct S57CatalogItem : Identifiable{
+public struct S57CatalogItem : Identifiable, S57Displayable{
     
     public enum Implementation : String {
         case asc = "ASC"
         case bin = "BIN"
         case txt = "TXT"
     }
-    public var id : UInt
+    public var id : UInt64
     public var file : String
     public var longFile : String
     public var volume : String
@@ -26,6 +26,23 @@ public struct S57CatalogItem : Identifiable{
     public var elon : Double?
     public var crc : String
     public var comment : String
+    public var prim : S57GeometricPrimitive = .area
+    
+    public var coordinates : [S57Coordinate]  {
+        
+        if let slat = slat, let nlat = nlat, let wlon = wlon, let elon = elon {
+            return [
+                S57Coordinate(longitude: elon, latitude: slat),
+                S57Coordinate(longitude: wlon, latitude: slat),
+                S57Coordinate(longitude: wlon, latitude: nlat),
+                S57Coordinate(longitude: elon, latitude: nlat),
+                S57Coordinate(longitude: elon, latitude: slat)
+            ]
+        }else{
+            return []
+        }
+        
+    }
     
     public var region : MKCoordinateRegion? {
         if let nlat = nlat, let slat = slat, let wlon = wlon, let elon = elon {
@@ -51,7 +68,7 @@ public struct S57CatalogItem : Identifiable{
         do{
             let field = try item.CATD ?!  SomeErrors.notACatalogEntry
             let rcid = (try field.RCID ?! SomeErrors.encodingError) as! String
-            id = try UInt(rcid) ?! SomeErrors.encodingError
+            id = try UInt64(rcid) ?! SomeErrors.encodingError
             
             file = (try field.FILE ?! SomeErrors.encodingError) as! String
             longFile = (try field.LFIL ?! SomeErrors.encodingError) as! String
