@@ -15,12 +15,12 @@ extension MKCoordinateRegion {
     
 
     var topLeft : CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: center.latitude - span.latitudeDelta / 2.0,
+        return CLLocationCoordinate2D(latitude: center.latitude + span.latitudeDelta / 2.0,
                           longitude: center.longitude - span.longitudeDelta / 2.0)
     }
     
     var bottomRight : CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: center.latitude + span.latitudeDelta / 2.0,
+        return CLLocationCoordinate2D(latitude: center.latitude - span.latitudeDelta / 2.0,
                           longitude: center.longitude + span.longitudeDelta / 2.0)
     }
 
