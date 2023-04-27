@@ -8,7 +8,8 @@
 import Foundation
 import MapKit
 
-public protocol S57Displayable {
+@available(macOS 10.15, *)
+public protocol S57Displayable : Identifiable {
     
     var id : UInt64 {get}
     var prim : S57GeometricPrimitive {get}
