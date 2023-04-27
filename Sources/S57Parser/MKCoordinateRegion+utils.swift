@@ -89,9 +89,16 @@ extension MKCoordinateRegion {
     }
     
     func union(_ region : MKCoordinateRegion) -> MKCoordinateRegion {
-        return MKCoordinateRegion(mapRect.union(region.mapRect))
+        
+        let top = max(topLeft.latitude , region.topLeft.latitude)
+        let bottom = min(bottomRight.latitude , region.bottomRight.latitude)
+        let left = min(topLeft.longitude , region.topLeft.longitude)
+        let right = max(bottomRight.longitude , region.bottomRight.longitude)
+
+        return MKCoordinateRegion(top: top, left: left, bottom: bottom, right: right)
     }
     
+
     func resizedByFactor(_ factor: Double) -> MKCoordinateRegion{
         let newSpan = MKCoordinateSpan(latitudeDelta: self.span.latitudeDelta * factor, longitudeDelta: self.span.longitudeDelta * factor)
         
