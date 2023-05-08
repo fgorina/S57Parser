@@ -8,10 +8,6 @@
 import Foundation
 import MapKit
 
-public struct S57Path {
-    var exterior : [S57Coordinate]
-    var interior : [S57Coordinate]
-}
 
 public struct S57CatalogItem : Identifiable, S57Displayable{
     

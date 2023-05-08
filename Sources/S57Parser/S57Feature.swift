@@ -55,6 +55,11 @@ public enum S57GeometricPrimitive : UInt8 {
     }
 }
 
+public struct S57Path {
+    public var exterior : [S57Coordinate]
+    public var interior : [S57Coordinate]
+}
+
 public struct S57Feature : Identifiable, S57Displayable {    
     
     // FRID
