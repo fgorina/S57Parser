@@ -102,37 +102,49 @@ public struct S57Feature : Identifiable, S57Displayable {
         return  bytes
     }
     
-    public var coordinates : [S57Coordinate]  {
-        var out : [S57Coordinate] = []
+    public var coordinates : S57Path {
+         
+        var exterior : [S57Coordinate] = []
+        var interior : [S57Coordinate] = []
         
         for pt in fspt {
+            
             if let vector = pt.vector{
                 if pt.orientation == .reverse{
-                    out.append(contentsOf: vector.expandedCoordinates.reversed())
+                    if pt.usageIndicator == .interior{
+                        interior.append(contentsOf: vector.expandedCoordinates.reversed())
+                    }else{
+                        exterior.append(contentsOf: vector.expandedCoordinates.reversed())
+                    }
                 }else {
-                    out.append(contentsOf: vector.expandedCoordinates)
+                    if pt.usageIndicator == .interior{
+                        interior.append(contentsOf: vector.expandedCoordinates)
+                    }else{
+                        exterior.append(contentsOf: vector.expandedCoordinates)
+                    }
+                    
                 }
             }
         }
         
-        return out
+        return S57Path(exterior: exterior, interior: interior)
     }
 
     public var region : MKCoordinateRegion?
     
     func computeRegion() -> MKCoordinateRegion?{
         
-        if coordinates.count == 0 {
+        if coordinates.exterior.count == 0 {
             return nil
-        } else if coordinates.count == 1 {
-            return  MKCoordinateRegion(center: coordinates[0].coordinates, latitudinalMeters: 0.0, longitudinalMeters: 0.0)
+        } else if coordinates.exterior.count == 1 {
+            return  MKCoordinateRegion(center: coordinates.exterior[0].coordinates, latitudinalMeters: 0.0, longitudinalMeters: 0.0)
         }else {
-            var minLat : Double = coordinates[0].latitude
-            var maxLat : Double = coordinates[0].latitude
-            var minLon : Double = coordinates[0].longitude
-            var maxLon : Double = coordinates[0].longitude
+            var minLat : Double = coordinates.exterior[0].latitude
+            var maxLat : Double = coordinates.exterior[0].latitude
+            var minLon : Double = coordinates.exterior[0].longitude
+            var maxLon : Double = coordinates.exterior[0].longitude
             
-            for coordinate in coordinates {
+            for coordinate in coordinates.exterior {
                 minLat = min(minLat, coordinate.latitude)
                 minLon = min(minLon, coordinate.longitude)
                 maxLat = max(maxLat, coordinate.latitude)

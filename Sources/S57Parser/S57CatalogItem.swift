@@ -8,6 +8,11 @@
 import Foundation
 import MapKit
 
+public struct S57Path {
+    var exterior : [S57Coordinate]
+    var interior : [S57Coordinate]
+}
+
 public struct S57CatalogItem : Identifiable, S57Displayable{
     
     public enum Implementation : String {
@@ -28,18 +33,18 @@ public struct S57CatalogItem : Identifiable, S57Displayable{
     public var comment : String
     public var prim : S57GeometricPrimitive = .line
     
-    public var coordinates : [S57Coordinate]  {
+    public var coordinates : S57Path  {
         
         if let slat = slat, let nlat = nlat, let wlon = wlon, let elon = elon {
-            return [
+            return S57Path(exterior: [
                 S57Coordinate(longitude: elon, latitude: slat),
                 S57Coordinate(longitude: wlon, latitude: slat),
                 S57Coordinate(longitude: wlon, latitude: nlat),
                 S57Coordinate(longitude: elon, latitude: nlat),
                 S57Coordinate(longitude: elon, latitude: slat)
-            ]
+            ], interior: [])
         }else{
-            return []
+            return S57Path(exterior: [], interior: [])
         }
         
     }
