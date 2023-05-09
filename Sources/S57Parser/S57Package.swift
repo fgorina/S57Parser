@@ -68,5 +68,18 @@ public class S57Package {
         currentFeatureClasses = parsedData.featureClasses
     }
     
-    
+    public func featuresIntersect(_ rect : MKMapRect) -> [S57Feature]{
+        return currentFeatures.filter { (key: UInt64, value: S57Feature) in
+            if let region = value.region{
+                if value.prim == .point{
+                    return rect.contains(MKMapPoint(region.center))
+                 }else{
+                    return region.mapRect.intersects(rect)
+                }
+            }
+            return false
+        }.map { (key: UInt64, value: S57Feature) in
+            return value
+        }
+    }
 }
