@@ -17,7 +17,7 @@ public class S57Package {
     public var currentItem : S57CatalogItem?
     public var currentFeatures : [UInt64 : S57Feature] = [:]
     public var currentFeatureClasses :  [(UInt16, String)] = []
-    public var compilationScale : UInt64 = 0
+    public var compilationScale : UInt32 = 0
     public var region : MKCoordinateRegion
     
     public init(url : URL) throws{

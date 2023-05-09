@@ -582,8 +582,8 @@ Header :
     
     public var featureClasses : [(UInt16, String)] = []
     
-    var  compilationScale : UInt64 {
-        return parameters?.CSCL as? UInt64 ?? 0
+    var  compilationScale : UInt32 {
+        return parameters?.CSCL as? UInt32 ?? 1
     }
 
     func vectorForVRPT(_ vrpt : S57VRPT) -> S57Vector?{
