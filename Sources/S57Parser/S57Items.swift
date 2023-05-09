@@ -34,7 +34,7 @@ public struct DataItemField : Identifiable {
     public var tag : String
     public var name : String
     public var properties : [Values] = []      // En cas de No repeatSubfields aleshores te un sols element
-    subscript(dynamicMember member: String) -> Any?{
+    public subscript(dynamicMember member: String) -> Any?{
         if properties.count == 1{
             return properties[0].properties[member]
         }else{
@@ -42,7 +42,7 @@ public struct DataItemField : Identifiable {
         }
     }
     
-    subscript(index: Int) -> Values? {
+    public subscript(index: Int) -> Values? {
         if index >= 0 && index < properties.count {
             return properties[index]
         }else{
