@@ -17,6 +17,7 @@ public class S57Package {
     public var currentItem : S57CatalogItem?
     public var currentFeatures : [UInt64 : S57Feature] = [:]
     public var currentFeatureClasses :  [(UInt16, String)] = []
+    public var compilationScale : UInt64 = 0
     public var region : MKCoordinateRegion
     
     public init(url : URL) throws{
@@ -66,6 +67,7 @@ public class S57Package {
         try parsedData.parse(false) // Just to not use a securityScopedURL
         currentFeatures = parsedData.features
         currentFeatureClasses = parsedData.featureClasses
+        compilationScale = parsedData.compilationScale
     }
     
     public func featuresIntersect(_ rect : MKMapRect) -> [S57Feature]{
