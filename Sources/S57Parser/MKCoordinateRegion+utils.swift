@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-extension MKCoordinateRegion {
+public extension MKCoordinateRegion {
     
     static var world = MKCoordinateRegion(top: 50, left: -20, bottom: -50, right: 20)
     static var emptyRegion = MKCoordinateRegion(top: 0, left: 0, bottom: 0, right: 0)
@@ -104,6 +104,21 @@ extension MKCoordinateRegion {
         
         return MKCoordinateRegion(center: center, span: newSpan)
     }
+    
+    func contains(_ loc : CLLocationCoordinate2D) -> Bool{
+        let rect = self.mapRect
+        let point = MKMapPoint(loc)
+        return rect.contains(point)
+    }
+    
+    var area : Double {// In MKMapPoint units
+        
+        let r = self.mapRect
+        let area = r.width * r.height
+        
+        return area
+    }
+
 
 }
 
