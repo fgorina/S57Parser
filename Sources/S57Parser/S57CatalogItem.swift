@@ -65,6 +65,8 @@ public struct S57CatalogItem : Identifiable, S57Displayable{
         }
     }
     
+    public var minScale = 0.0
+    
     init(_ item : DataItem) throws{
         do{
             let field = try item.CATD ?!  SomeErrors.notACatalogEntry

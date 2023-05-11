@@ -16,5 +16,6 @@ public protocol S57Displayable : Identifiable {
     var prim : S57GeometricPrimitive {get}
     var region : MKCoordinateRegion? {get}
     var coordinates : S57Path {get}
+    var minScale : Double {get}
     
 }

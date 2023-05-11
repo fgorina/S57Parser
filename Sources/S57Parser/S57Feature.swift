@@ -137,6 +137,8 @@ public struct S57Feature : Identifiable, S57Displayable {
 
     public var region : MKCoordinateRegion?
     
+    public var minScale : Double = 0.0
+    
     func computeRegion() -> MKCoordinateRegion?{
         
         if coordinates.exterior.count == 0 {
@@ -213,6 +215,9 @@ public struct S57Feature : Identifiable, S57Displayable {
             }
         }
         
+        if let  xscale = self.attributes[133]?.value{   // Precompute  minScale
+            minScale = Double(xscale) ?? 0.0
+        }
         
         if  let nattributes = item.NATF?.properties {
             for someAttr in nattributes {
