@@ -46,7 +46,44 @@ public class S57Package {
         }
         
     }
-    
+    public func add(item: S57CatalogItem) throws {
+        // Split file into items
+        var separator = "/"
+        if item.file.contains("/"){
+            separator = "/"
+        }else if item.file.contains("\\"){
+            separator = "\\"
+        }
+        
+        let components = item.file.components(separatedBy: separator)
+        var url = url
+        for component in components{
+            url = url.appendingPathComponent(component)
+        }
+        var parsedData = S57Parser(url: url)
+        try parsedData.parse(false) // Just to not use a securityScopedURL
+
+        for (key, feature) in parsedData.features {
+            if currentFeatures[key] == nil {
+                currentFeatures[key] = feature
+            }
+            
+        }
+        
+        for item in parsedData.featureClasses {
+            if !currentFeatureClasses.contains(where: { someItem in
+                someItem.0 == item.0
+            }){
+                currentFeatureClasses.append(item)
+            }
+        }
+        
+        if parsedData.compilationScale < compilationScale{
+            compilationScale = parsedData.compilationScale
+        }
+        
+        
+    }
     public func select(item : S57CatalogItem) throws {
         self.currentItem = item
         

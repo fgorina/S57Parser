@@ -239,7 +239,5 @@ public struct S57Feature : Identifiable, S57Displayable {
                 fspt.append(pt)
             }
         }
-
-          
     }
 }
