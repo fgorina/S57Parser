@@ -81,8 +81,6 @@ public class S57Package {
         if parsedData.compilationScale < compilationScale{
             compilationScale = parsedData.compilationScale
         }
-        
-        
     }
     public func select(item : S57CatalogItem) throws {
         self.currentItem = item
