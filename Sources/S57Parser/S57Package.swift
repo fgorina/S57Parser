@@ -55,7 +55,7 @@ public class S57Package {
         var someItems : [S57CatalogItem] = []
         
         for item in catalog{
-            if item.region?.intersects(region) ?? false{
+            if item.region?.mapRect.contains(region.mapRect) ?? false{
                 someItems.append(item)
             }
         }
