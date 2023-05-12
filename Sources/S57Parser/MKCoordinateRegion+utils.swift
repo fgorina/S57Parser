@@ -10,7 +10,7 @@ import MapKit
 
 public extension MKCoordinateRegion {
     
-    static var world = MKCoordinateRegion(top: 50, left: -20, bottom: -50, right: 20)
+    static var world = MKCoordinateRegion(top: 85, left: -180, bottom: -85, right: 180)
     static var emptyRegion = MKCoordinateRegion(top: 0, left: 0, bottom: 0, right: 0)
     
 
