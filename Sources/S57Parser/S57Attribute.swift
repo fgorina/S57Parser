@@ -30,14 +30,11 @@ public struct S57Attribute : Identifiable {
         
         let someValues = value.split(separator: ",")
         
-        if someValues.count > 1{
-            print ("Hola")
-        }
         
         if let expCatalog = expectedInputCatalog{
             var decoded = ""
             for aValue in someValues {
-                decoded = decoded + (!decoded.isEmpty ? ", " : "") + (expCatalog.valueForAttribute(attribute, value: value)?.meaning ?? String(aValue))
+                decoded = decoded + (!decoded.isEmpty ? ", " : "") + (expCatalog.valueForAttribute(attribute, value: String(aValue))?.meaning ?? String(aValue))
                 
             }
             self.decodedValue = decoded
