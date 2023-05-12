@@ -153,7 +153,7 @@ public class S57Package {
             }
         }
         
-        if changes {    // Rebuild Features
+        if changes && !selectedItems.isEmpty{    // Rebuild Features
             
             try select(item: selectedItems[0])
             
