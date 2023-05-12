@@ -8,6 +8,55 @@
 import Foundation
 import MapKit
 
+public class S57TileNode {
+    var item : S57CatalogItem?
+    var region : MKCoordinateRegion
+    var children :[S57TileNode] = []
+    
+    init(item : S57CatalogItem? , region : MKCoordinateRegion, children: [S57TileNode] = []){
+        self.item = item
+        self.region = region
+        self.children = children
+    }
+    
+    func add(_ newItem : S57CatalogItem){
+        
+        if !region.mapRect.contains(newItem.region!.mapRect){   // Nothing to do. Probably an error or is outside the place
+            return
+        }
+        
+        var done = false
+        
+        for child in children{
+            if child.region.mapRect.contains(newItem.region!.mapRect){
+                child.add(newItem)
+                done = true
+                break
+            }
+        }
+        
+        if !done {
+            let newNode = S57TileNode(item : newItem, region: newItem.region!)
+            children.append(newNode)
+        }
+        
+    }
+    
+    func firstTileThatContainsRegion(_ region : MKCoordinateRegion) -> S57TileNode?{
+        if region.mapRect.contains(region.mapRect){
+            for child in children {
+                if let target = child.firstTileThatContainsRegion(region){
+                    return target
+                }
+            }
+            
+            return self
+            
+        }else{
+            return nil
+        }
+    }
+}
 
 public class S57Package {
     
@@ -19,6 +68,7 @@ public class S57Package {
     public var currentFeatureClasses :  [(UInt16, String)] = []
     public var compilationScale : UInt32 = 0
     public var region : MKCoordinateRegion
+    public var tree : S57TileNode
     
     public init(url : URL) throws{
         
@@ -45,42 +95,41 @@ public class S57Package {
             })
         }
         
+        tree = createTree()
+        
+    }
+    
+    func createTree() -> S57TileNode{
+        var firstNode = S57TileNode(item: nil, region: MKCoordinateRegion.world)
+        
+        var orderedItems = catalog.sorted { item1, item2 in
+            item1.region!.area > item2.region!.area
+        }
+        
+        for item in orderedItems {
+            firstNode.add(item)
+         }
+        
+        return firstNode
     }
     
     // Bool returns true if some changes has been made
     
     public func selectForRegion(_ region : MKCoordinateRegion) throws -> Bool{
         
-            // First we compute the best coverage that may be done
-        var someItems : [S57CatalogItem] = []
-        
-        for item in catalog{
-            if item.region?.mapRect.contains(region.mapRect) ?? false{
-                someItems.append(item)
-            }
-        }
-        
-        if someItems.isEmpty{
-            return false
-        }
-        
-        someItems.sort { item1, item2 in
-            item1.region!.area < item2.region!.area
-        }
-        
-        // Now we try to get the amallest set that inclusdes all the area
-        
-        var coveredRegion = MKCoordinateRegion.emptyRegion
-        someItems = [someItems.first!]
         var selectedItems : [S57CatalogItem] = []
-        for item in someItems {
-            selectedItems.append(item)
-            coveredRegion = coveredRegion.union(item.region!)
-            
-            if coveredRegion.mapRect.contains(region.mapRect){
-                break
+        
+        if let tile = tree.firstTileThatContainsRegion(region){
+            if let topItem = tile.item{
+                selectedItems.append(topItem)
+            }
+            for child in tile.children{
+                if let item = child.item{
+                    selectedItems.append(item)
+                }
             }
         }
+  
         
         // Now try tyop detect changes
         
