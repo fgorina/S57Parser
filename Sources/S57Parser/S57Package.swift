@@ -71,6 +71,7 @@ public class S57Package {
         // Now we try to get the amallest set that inclusdes all the area
         
         var coveredRegion = MKCoordinateRegion.emptyRegion
+        someItems = [someItems.first!]
         var selectedItems : [S57CatalogItem] = []
         for item in someItems {
             selectedItems.append(item)
