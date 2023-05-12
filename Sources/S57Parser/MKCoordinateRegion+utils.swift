@@ -68,7 +68,7 @@ public extension MKCoordinateRegion {
     
     init(top : Double, left: Double, bottom : Double, right: Double){
         let center = CLLocationCoordinate2D(latitude: (top + bottom) / 2, longitude: (left + right) / 2)
-        let span = MKCoordinateSpan(latitudeDelta: right - left, longitudeDelta: top - bottom)
+        let span = MKCoordinateSpan(latitudeDelta: top - bottom, longitudeDelta: right - left)
         
         self.init(center: center, span: span)
     }
