@@ -14,7 +14,7 @@ public class S57Package {
     public var url : URL       // URL of the folder containint the package
     
     public var catalog : [S57CatalogItem] = []
-    public var currentItem : S57CatalogItem?
+    public var currentItem : [S57CatalogItem] = []
     public var currentFeatures : [UInt64 : S57Feature] = [:]
     public var currentFeatureClasses :  [(UInt16, String)] = []
     public var compilationScale : UInt32 = 0
@@ -46,7 +46,87 @@ public class S57Package {
         }
         
     }
+    
+    // Bool returns true if some changes has been made
+    
+    public func selectForRegion(_ region : MKCoordinateRegion) throws -> Bool{
+        
+            // First we compute the best coverage that may be done
+        var someItems : [S57CatalogItem] = []
+        
+        for item in catalog{
+            if item.region?.intersects(region) ?? false{
+                someItems.append(item)
+            }
+        }
+        
+        if someItems.isEmpty{
+            return false
+        }
+        
+        someItems.sort { item1, item2 in
+            item1.region!.area < item2.region!.area
+        }
+        
+        // Now we try to get the amallest set that inclusdes all the area
+        
+        var coveredRegion = MKCoordinateRegion.emptyRegion
+        var selectedItems : [S57CatalogItem] = []
+        for item in someItems {
+            selectedItems.append(item)
+            coveredRegion = coveredRegion.union(item.region!)
+            
+            if coveredRegion.mapRect.contains(region.mapRect){
+                break
+            }
+        }
+        
+        // Now try tyop detect changes
+        
+        var changes = false
+        
+        for item in currentItem{
+            if !selectedItems.contains(where: { i in
+                i.id == item.id
+            }){
+                changes = true
+            }
+        }
+        
+        if !changes {
+            for item in selectedItems{
+                if !currentItem.contains(where: { i in
+                    i.id ==  item.id
+                }){
+                    changes = true
+                }
+            }
+        }
+        
+        if changes {    // Rebuild Features
+            
+            try select(item: selectedItems[0])
+            
+            for i in 1..<selectedItems.count{
+                try add(item: selectedItems[i])
+            }
+            
+            return true
+            
+        }else{
+            return false
+        }
+        
+    }
+    
+    
     public func add(item: S57CatalogItem) throws {
+        
+        if self.currentItem.contains(where: { someItem in
+            item.id == someItem.id
+        }){
+            return
+        }
         // Split file into items
         var separator = "/"
         if item.file.contains("/"){
@@ -81,9 +161,12 @@ public class S57Package {
         if parsedData.compilationScale < compilationScale{
             compilationScale = parsedData.compilationScale
         }
+        
+        self.currentItem.append(item)
     }
+    
     public func select(item : S57CatalogItem) throws {
-        self.currentItem = item
+        self.currentItem = [item]
         
         // Split file into items
         var separator = "/"
