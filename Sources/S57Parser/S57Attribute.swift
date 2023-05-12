@@ -28,8 +28,15 @@ public struct S57Attribute : Identifiable {
         
         self.value = value
         
+        let someValues = value.split(separator: ",")
+        
         if let expCatalog = expectedInputCatalog{
-            self.decodedValue = expCatalog.valueForAttribute(attribute, value: value)?.meaning ?? value
+            var decoded = ""
+            for aValue in someValues {
+                decoded = decoded + (!decoded.isEmpty ? ", " : "") + (expCatalog.valueForAttribute(attribute, value: value)?.meaning ?? String(aValue))
+                
+            }
+            self.decodedValue = decoded
         }else{
             self.decodedValue = value
         }
