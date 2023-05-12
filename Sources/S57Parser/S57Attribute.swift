@@ -30,6 +30,10 @@ public struct S57Attribute : Identifiable {
         
         let someValues = value.split(separator: ",")
         
+        if someValues.count > 1{
+            print ("Hola")
+        }
+        
         if let expCatalog = expectedInputCatalog{
             var decoded = ""
             for aValue in someValues {
