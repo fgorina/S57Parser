@@ -177,30 +177,24 @@ public class S57Package {
         }){
             return
         }
-        // Split file into items
-        var separator = "/"
-        if item.file.contains("/"){
-            separator = "/"
-        }else if item.file.contains("\\"){
-            separator = "\\"
-        }
         
-        let components = item.file.components(separatedBy: separator)
-        var url = url
-        for component in components{
-            url = url.appendingPathComponent(component)
+        // Lokupmindes into catalog
+        
+        let index = catalog.firstIndex { someItem in
+            item.id == someItem.id
         }
-        var parsedData = S57Parser(url: url)
-        try parsedData.parse(false) // Just to not use a securityScopedURL
-
-        for (key, feature) in parsedData.features {
+        if index == nil{
+            return
+        }
+        try catalog[index!].parse(url)
+        for (key, feature) in  catalog[index!].parsedData!.features {
             if currentFeatures[key] == nil {
                 currentFeatures[key] = feature
             }
             
         }
         
-        for item in parsedData.featureClasses {
+        for item in  catalog[index!].parsedData!.featureClasses {
             if !currentFeatureClasses.contains(where: { someItem in
                 someItem.0 == item.0
             }){
@@ -208,8 +202,8 @@ public class S57Package {
             }
         }
         
-        if parsedData.compilationScale < compilationScale{
-            compilationScale = parsedData.compilationScale
+        if  catalog[index!].parsedData!.compilationScale < compilationScale{
+            compilationScale = catalog[index!].parsedData!.compilationScale
         }
         
         self.currentItem.append(item)
@@ -218,24 +212,18 @@ public class S57Package {
     public func select(item : S57CatalogItem) throws {
         self.currentItem = [item]
         
-        // Split file into items
-        var separator = "/"
-        if item.file.contains("/"){
-            separator = "/"
-        }else if item.file.contains("\\"){
-            separator = "\\"
-        }
+        // Lokupmindes into catalog
         
-        let components = item.file.components(separatedBy: separator)
-        var url = url
-        for component in components{
-            url = url.appendingPathComponent(component)
+        let index = catalog.firstIndex { someItem in
+            item.id == someItem.id
         }
-        var parsedData = S57Parser(url: url)
-        try parsedData.parse(false) // Just to not use a securityScopedURL
-        currentFeatures = parsedData.features
-        currentFeatureClasses = parsedData.featureClasses
-        compilationScale = parsedData.compilationScale
+        if index == nil{
+            return
+        }
+        try catalog[index!].parse(url)
+        currentFeatures = catalog[index!].parsedData!.features
+        currentFeatureClasses = catalog[index!].parsedData!.featureClasses
+        compilationScale = catalog[index!].parsedData!.compilationScale
     }
     
     public func featuresIntersect(_ rect : MKMapRect) -> [S57Feature]{

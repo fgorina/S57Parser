@@ -29,6 +29,8 @@ public struct S57CatalogItem : Identifiable, S57Displayable{
     public var comment : String
     public var prim : S57GeometricPrimitive = .line
     
+    public var parsedData : S57Parser?
+    
     public var coordinates : S57Path  {
         
         if let slat = slat, let nlat = nlat, let wlon = wlon, let elon = elon {
@@ -101,5 +103,30 @@ public struct S57CatalogItem : Identifiable, S57Displayable{
             throw(error)
         }
             
+    }
+    
+    // URL is the base URL of the oackage
+    
+    mutating func parse(_ url : URL) throws{
+        
+        if parsedData != nil {
+            return
+        }
+        
+        var separator = "/"
+        if file.contains("/"){
+            separator = "/"
+        }else if file.contains("\\"){
+            separator = "\\"
+        }
+        
+        let components = file.components(separatedBy: separator)
+        var url = url
+        for component in components{
+            url = url.appendingPathComponent(component)
+        }
+        parsedData = S57Parser(url: url)
+        try parsedData!.parse(false) // Just to not use a securityScopedURL
+
     }
 }
