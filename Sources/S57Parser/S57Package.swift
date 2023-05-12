@@ -68,7 +68,7 @@ public class S57Package {
     public var currentFeatureClasses :  [(UInt16, String)] = []
     public var compilationScale : UInt32 = 0
     public var region : MKCoordinateRegion
-    public var tree : S57TileNode
+    public var tree : S57TileNode = S57TileNode(item: nil, region: MKCoordinateRegion.world)
     
     public init(url : URL) throws{
         
