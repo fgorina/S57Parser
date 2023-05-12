@@ -43,7 +43,7 @@ public class S57TileNode {
     }
     
     func firstTileThatContainsRegion(_ region : MKCoordinateRegion) -> S57TileNode?{
-        if region.mapRect.contains(region.mapRect){
+        if self.region.mapRect.contains(region.mapRect){
             for child in children {
                 if let target = child.firstTileThatContainsRegion(region){
                     return target
